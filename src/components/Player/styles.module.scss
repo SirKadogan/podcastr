@@ -25,9 +25,11 @@
   footer {
     align-self: stretch;
 
-    &.empty {
-      opacity: 0.5;
-    }
+    
+  &.empty .progress{
+    opacity: 0.5;
+  }
+
   }
 }
 
@@ -75,6 +77,8 @@
   gap: 0.5rem;
   font-size: 0.875rem;
 
+  
+
   span {
     display: inline-block;
     width: 4rem;
@@ -108,6 +112,7 @@
     transition: filter 0.2s;
 
     &:disabled {
+      opacity: 0.5;
       cursor: default;
     }
 

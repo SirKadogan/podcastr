@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useContext } from 'react';
 
 type Episode = {
   title: string;
@@ -18,6 +18,8 @@ type PlayerContextData = {
   playList: (list: Episode[], index: number) => void;
   playNext: () => void;
   playPrevious: () => void;
+  hasNext: boolean;
+  hasPrevious: boolean;
 };
 
 type PlayerContextProviderProps = {
@@ -31,6 +33,10 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
   const [episodeList, setEpisodeList] = useState([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+
+
+  const hasPrevious = currentEpisodeIndex > 0;
+  const hasNext = currentEpisodeIndex + 1 < episodeList.length;
 
   const play = (episode: Episode) => {
     setEpisodeList([episode]);
@@ -53,17 +59,13 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
   }
 
   const playNext = () => {
-    const nextEpisodeIndex = currentEpisodeIndex + 1;
-
-    if (nextEpisodeIndex < episodeList.length) {
-      setCurrentEpisodeIndex(nextEpisodeIndex);
+    if (hasNext) {
+      setCurrentEpisodeIndex(currentEpisodeIndex + 1);
     }
   }
 
   const playPrevious = () => {
-    const previousEpisodeIndex = currentEpisodeIndex - 1;
-
-    if (previousEpisodeIndex >= 0) {
+    if (hasPrevious) {
       setCurrentEpisodeIndex(currentEpisodeIndex - 1);
     }
 
@@ -80,9 +82,15 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         setPlayingState,
         playList,
         playNext,
-        playPrevious
+        playPrevious,
+        hasNext,
+        hasPrevious
       }}>
       {children}
     </PlayerContext.Provider>
   )
+}
+
+export const usePlayer = () => {
+  return useContext(PlayerContext)
 }
