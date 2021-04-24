@@ -7,7 +7,13 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 export function Player() {
-  const { episodeList, currentEpisodeIndex, isPlaying, togglePlay } = useContext(PlayerContext);
+  const {
+    episodeList,
+    currentEpisodeIndex,
+    isPlaying,
+    togglePlay,
+    setPlayingState,
+  } = useContext(PlayerContext);
   const episode = episodeList[currentEpisodeIndex];
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -76,6 +82,8 @@ export function Player() {
             ref={audioRef}
             src={episode.url}
             autoPlay
+            onPlay={() => setPlayingState(true)}
+            onPause={() => setPlayingState(false)}
           />
         )}
 
