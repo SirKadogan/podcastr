@@ -4,7 +4,7 @@ type Episode = {
   title: string;
   members: string;
   thumbnail: string;
-  duration: string;
+  duration: number;
   url: string;
 }
 
@@ -24,6 +24,7 @@ type PlayerContextData = {
   playPrevious: () => void;
   hasNext: boolean;
   hasPrevious: boolean;
+  clearPlayerState: () => void;
 };
 
 type PlayerContextProviderProps = {
@@ -42,7 +43,7 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
 
 
   const hasPrevious = currentEpisodeIndex > 0;
-  const hasNext = currentEpisodeIndex + 1 < episodeList.length;
+  const hasNext = isShuffling || currentEpisodeIndex + 1 < episodeList.length;
 
   const play = (episode: Episode) => {
     setEpisodeList([episode]);
@@ -72,9 +73,14 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     setIsPlaying(state)
   }
 
+  const clearPlayerState = () => {
+    setEpisodeList([]);
+    setCurrentEpisodeIndex(0);
+  }
+
   const playNext = () => {
     if (isShuffling) {
-      const nextRandomEpisodeIndex = Math.floor(Math.random() * episodeList.length)
+      const nextRandomEpisodeIndex = Math.floor(Math.random() * episodeList.length);
       setCurrentEpisodeIndex(nextRandomEpisodeIndex);
     } else if (hasNext) {
       setCurrentEpisodeIndex(currentEpisodeIndex + 1);
@@ -105,7 +111,8 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         isLooping,
         toggleLoop,
         toggleShuffle,
-        isShuffling
+        isShuffling,
+        clearPlayerState
       }}>
       {children}
     </PlayerContext.Provider>
