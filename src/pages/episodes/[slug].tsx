@@ -62,10 +62,32 @@ export default function Episode(props: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data } = await api.get('episodes', {
+    params: {
+      _limit: 2,
+      _sort: 'published_at',
+      _order: 'desc'
+    }
+  })
+
+  const paths = data.map((episode) => {
+    return {
+      params: {
+        slug: episode.id,
+      }
+    }
+  })
+
   return {
-    paths: [],
+    paths,
     fallback: 'blocking'
   }
+  /* If "fallback: true", getStaticProps will run on client side. This way, crawlers would
+  not index the page, but a new page would be cached on the server once a user entres the page*/
+
+  /* If fallback: false, pages not set on "paths" would return 404*/
+
+  /* If fallback: blocking, pages are rendered on the next.js server and cached once loaded.*/
 }
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
