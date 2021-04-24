@@ -5,3 +5,9 @@
     flex: 1;
   }
 }
+
+.mainContent {
+  height: calc(100vh - 6.5rem);
+  width: 100%;
+  overflow-y: scroll;
+}

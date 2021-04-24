@@ -14,7 +14,9 @@ function MyApp({ Component, pageProps }) {
       <div className={styles.wrapper}>
         <main>
           <Header />
-          <Component {...pageProps} />
+          <div className={styles.mainContent}>
+            <Component {...pageProps} />
+          </div>
         </main>
         <Player />
       </div>
